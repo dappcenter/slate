@@ -2,7 +2,7 @@ const { readFileSync, writeFileSync } = require('fs')
 const path = require('path')
 const parameterize = require('parameterize')
 const mustache = require('mustache')
-const template = readFileSync(path.resolve(__dirname, 'tmp', 'slate.mustache'), 'utf8')
+const template = readFileSync(path.resolve(__dirname, 'source', 'slate.mustache'), 'utf8')
 const protocJson = require('./tmp/broker-proto.json')
 
 protocJson.files.forEach(inputFile => {
