@@ -4,7 +4,7 @@
 
 echo "Building html output..."
 
-bundle exec build --clean
+bundle exec middleman build --clean || exit 1
 
 echo "Deploying using now.sh"
 
