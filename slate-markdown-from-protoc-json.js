@@ -30,6 +30,7 @@ protocJson.files.forEach(inputFile => {
     message.id = parameterize(message.longName)
 
     message.enums = []
+    message.messages = []
 
     message.fields.forEach(field => {
       field.id = parameterize(field.longType)
@@ -48,12 +49,20 @@ protocJson.files.forEach(inputFile => {
     })
   })
 
-  // loop over again to move sub-enums to their proper message
-  inputFile.messages.forEach(message => {
+  // loop over again to move sub-enums and sub-messages to their proper message
+  inputFile.messages.slice().forEach(message => {
     message.fields.forEach(field => {
       if (field.longType.startsWith(message.longName)) {
-        const [ enumb ] = inputFile.enums.splice(inputFile.enums.findIndex(enumb => enumb.longName === field.longType), 1)
-        message.enums.push(enumb)
+        const enumIndex = inputFile.enums.findIndex(enumb => enumb.longName === field.longType)
+
+        if (enumIndex !== -1) {
+          const [ enumb ] = inputFile.enums.splice(enumIndex, 1)
+          message.enums.push(enumb)
+        } else {
+          const messageIndex = inputFile.messages.findIndex(message => message.longName === field.longType)
+          const [ submessage ] = inputFile.messages.splice(messageIndex, 1)
+          message.messages.push(submessage)
+        }
       }
     })
   })

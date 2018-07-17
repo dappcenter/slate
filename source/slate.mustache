@@ -59,6 +59,40 @@ This message has no parameters.
 {{/values}}
 
 {{/enums}}
+{{#messages}}
+
+### {{name}}
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+{{#hasFields}}
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+{{#fields}}
+| {{name}} | [{{type}}](#{{id}}) | {{{description}}} |
+{{/fields}}
+{{/hasFields}}
+{{^hasFields}}
+This message has no parameters.
+{{/hasFields}}
+
+{{#enums}}
+
+### <a name="{{id}}">{{name}}</a>
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+
+{{/messages}}
 {{/requestTypeEmbedded}}
 
 ### Response Type: [{{responseFullType}}](#{{responseTypeId}}) {{#responseStreaming}}(Streaming){{/responseStreaming}}
@@ -82,6 +116,8 @@ This message has no parameters.
 ### <a name="{{id}}">{{name}}</a>
 {{{description}}}
 
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
 | Name | Number | Description |
 | ---- | ------ | ----------- |
 {{#values}}
@@ -89,6 +125,40 @@ This message has no parameters.
 {{/values}}
 
 {{/enums}}
+{{#messages}}
+
+### {{name}}
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+{{#hasFields}}
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+{{#fields}}
+| {{name}} | [{{type}}](#{{id}}) | {{{description}}} |
+{{/fields}}
+{{/hasFields}}
+{{^hasFields}}
+This message has no parameters.
+{{/hasFields}}
+
+{{#enums}}
+
+### <a name="{{id}}">{{name}}</a>
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+
+{{/messages}}
 {{/responseTypeEmbedded}}
 
 {{/methods}}
@@ -119,6 +189,8 @@ This message has no parameters.
 ### <a name="{{id}}">{{name}}</a>
 {{{description}}}
 
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
 | Name | Number | Description |
 | ---- | ------ | ----------- |
 {{#values}}
@@ -126,6 +198,41 @@ This message has no parameters.
 {{/values}}
 
 {{/enums}}
+
+{{#messages}}
+
+### {{name}}
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+{{#hasFields}}
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+{{#fields}}
+| {{name}} | [{{type}}](#{{id}}) | {{{description}}} |
+{{/fields}}
+{{/hasFields}}
+{{^hasFields}}
+This message has no parameters.
+{{/hasFields}}
+
+{{#enums}}
+
+### <a name="{{id}}">{{name}}</a>
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+
+{{/messages}}
 
 {{/messages}}
 
