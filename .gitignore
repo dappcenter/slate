@@ -23,6 +23,8 @@ _yardoc
 doc/
 .idea/
 
+now/
+
 source/index.html.md
 
 node_modules

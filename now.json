@@ -1,0 +1,8 @@
+{
+  "static": {
+    "trailingSlash": true,
+    "unlisted": [
+      "docs/broker/api/slate.mustache"
+    ]
+  }
+}
