@@ -174,6 +174,26 @@ html, body {
     font-size: 12px;
   }
 
+  .toc-header {
+    padding: 0 0 0.25em;
+
+    li,a {
+      color: $nav-text;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    li {
+      font-size: 0.8em;
+      line-height: 1.7;
+      text-decoration: none;
+      padding-left: 15px;
+    }
+  }
+
   .toc-footer {
     padding: 1em 0;
     margin-top: 1em;

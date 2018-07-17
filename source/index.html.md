@@ -4,6 +4,9 @@ title: API Reference
 language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
 
+toc_headers:
+ - Broker Daemon API Documentation
+
 toc_footers:
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
