@@ -26,10 +26,13 @@ search: true
 
 {{#methods}}
 ## {{name}}
+{{{description}}}
 
 ### {{#unary}}Unary{{/unary}}{{#duplexStreaming}}Duplex Streaming{{/duplexStreaming}}{{#requestStreamingOnly}}Request Streaming{{/requestStreamingOnly}}{{#responseStreamingOnly}}Response Streaming{{/responseStreamingOnly}} RPC
-
-{{{description}}}
+{{#unary}}Unary RPCs follow a simple request/response pattern familiar to users of HTTP APIs.{{/unary}}
+{{#duplexStreaming}}Duplex Streaming RPCs allow for the client to stream data to the server and the server to stream data to thc client.{{/duplexStreaming}}
+{{#requestStreamingOnly}}Request Streaming RPCs allow the client to stream data to the server, but the server responds with a single message.{{/requestStreamingOnly}}
+{{#responseStreamingOnly}}Response Streaming RPCs take a single request message from the client, but the server responds with a stream of messages.{{/responseStreamingOnly}}
 
 ### Request Type: [{{requestFullType}}](#{{requestTypeId}}) {{#requestStreaming}}(Streaming){{/requestStreaming}}
 
