@@ -1,0 +1,151 @@
+---
+title: API Reference
+
+language_tabs: # must be one of https://git.io/vQNgJ
+  - javascript
+
+toc_footers:
+  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+
+search: true
+---
+
+{{#files}}
+
+# Introduction
+
+{{{description}}}
+
+{{#services}}
+
+# {{name}}
+{{{description}}}
+
+{{#methods}}
+## {{name}}
+{{{description}}}
+
+### Request Type: [{{requestFullType}}](#{{requestTypeId}})
+
+{{#requestTypeEmbedded}}
+{{{description}}}
+
+{{#hasFields}}
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+{{#fields}}
+| {{name}} | [{{type}}](#{{id}}) | {{{description}}} |
+{{/fields}}
+{{/hasFields}}
+{{^hasFields}}
+This message has no parameters.
+{{/hasFields}}
+
+{{#enums}}
+
+### <a name="{{id}}">{{longName}}</a>
+{{{description}}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+{{/requestTypeEmbedded}}
+
+### Response Type: [{{responseFullType}}](#{{responseTypeId}})
+
+{{#responseTypeEmbedded}}
+{{{description}}}
+
+{{#hasFields}}
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+{{#fields}}
+| {{name}} | [{{type}}](#{{id}}) | {{{description}}} |
+{{/fields}}
+{{/hasFields}}
+{{^hasFields}}
+This message has no parameters.
+{{/hasFields}}
+
+{{#enums}}
+
+### <a name="{{id}}">{{longName}}</a>
+{{{description}}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+{{/responseTypeEmbedded}}
+
+{{/methods}}
+{{/services}}
+
+# Message Reference
+
+{{#messages}}
+
+## {{longName}}
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+{{#hasFields}}
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+{{#fields}}
+| {{name}} | [{{type}}](#{{id}}) | {{{description}}} |
+{{/fields}}
+{{/hasFields}}
+{{^hasFields}}
+This message has no parameters.
+{{/hasFields}}
+
+{{#enums}}
+
+### <a name="{{id}}">{{longName}}</a>
+{{{description}}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+
+{{/messages}}
+
+{{#enums}}
+
+## {{longName}}
+{{{description}}}
+
+Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+{{#values}}
+| {{name}} | {{number}} | {{{description}}} |
+{{/values}}
+
+{{/enums}}
+
+{{/files}}
+
+# Scalar Value Types
+
+For more information, see the [proto3 reference](https://developers.google.com/protocol-buffers/docs/proto3#scalar).
+
+| Type | Notes |
+| ---- | ----- |
+{{#scalarValueTypes}}
+| <a name="{{id}}">{{protoType}}</a> | {{notes}} |
+{{/scalarValueTypes}}

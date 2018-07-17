@@ -2,238 +2,655 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
   - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
 
 search: true
 ---
 
+
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+This is the API documentation for the Broker Daemon RPC Server.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
-
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
+# AdminService
+The AdminService performs administrative tasks on the BrokerDaemon.
 
 ```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
+const grpc = require('grpc')
+const caller = require('grpc-caller')
+const PROTO_OPTIONS = {
+  convertFieldsToCamelCase: true,
+  binaryAsBase64: true,
+  longsAsStrings: true,
+  enumsAsStrings: true
+}
+const brokerProto = grpc.load('/path/to/broker.proto', 'proto', PROTO_OPTIONS)
+const address = 'localhost:27492'
+const adminService = caller(address, brokerProto.AdminService)
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
+## HealthCheck
+The HealthCheck returns a status of all of the components of the BrokerDaemon.
 
 ```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+const { engineStatus, relayerStatus } = await adminService.healthCheck({})
+console.log({ engineStatus, relayerStatus })
 ```
 
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> The above command will print:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "engineStatus": [
+    {
+      "symbol": "BTC",
+      "status": "OK"
+    },
+    {
+      "symbol": "LTC",
+      "status": "OK"
+    },
+  ],
+  "relayerStatus": "OK"
 }
 ```
 
-This endpoint retrieves a specific kitten.
+### Request Type: [google.protobuf.Empty](#googleprotobufempty)
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
-### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+This message has no parameters.
 
-### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+### Response Type: [HealthCheckResponse](#healthcheckresponse)
 
-## Delete a Specific Kitten
 
-```ruby
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| engine_status | [EngineStatus](#enginestatus) |  |
+| relayer_status | [string](#string) |  |
 
-```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
 
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
+# OrderBookService
 
-```javascript
-const kittn = require('kittn');
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
+## WatchMarket
 
-> The above command returns JSON structured like this:
 
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
+### Request Type: [WatchMarketRequest](#watchmarketrequest)
 
-This endpoint deletes a specific kitten.
 
-### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| market | [string](#string) |  |
 
-### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+### Response Type: [WatchMarketResponse](#watchmarketresponse)
 
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| type | [EventType](#watchmarketresponseeventtype) |  |
+| market_event | [MarketEvent](#marketevent) |  |
+
+
+### <a name="watchmarketresponseeventtype">WatchMarketResponse.EventType</a>
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| ADD | 0 |  |
+| DELETE | 1 |  |
+
+
+
+# OrderService
+
+
+## CreateBlockOrder
+
+
+### Request Type: [CreateBlockOrderRequest](#createblockorderrequest)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| market | [string](#string) |  |
+| side | [Side](#side) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| is_market_order | [bool](#bool) |  |
+| limit_price | [string](#string) | Prices are decimals but are represented as strings since Protobuf does not support a decimal type |
+| time_in_force | [TimeInForce](#timeinforce) |  |
+
+
+### Response Type: [CreateBlockOrderResponse](#createblockorderresponse)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+
+
+## GetBlockOrder
+
+
+### Request Type: [GetBlockOrderRequest](#getblockorderrequest)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+
+
+### Response Type: [GetBlockOrderResponse](#getblockorderresponse)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| status | [BlockOrderStatus](#blockorderblockorderstatus) |  |
+| market | [string](#string) |  |
+| side | [Side](#side) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| is_market_order | [bool](#bool) |  |
+| limit_price | [string](#string) | Prices are decimals but are represented as strings since Protobuf does not support a decimal type |
+| time_in_force | [TimeInForce](#timeinforce) |  |
+| fill_amount | [string](#string) |  |
+| open_orders | [Order](#order) |  |
+| fills | [Fill](#fill) |  |
+
+
+## CancelBlockOrder
+
+
+### Request Type: [CancelBlockOrderRequest](#cancelblockorderrequest)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+
+
+### Response Type: [google.protobuf.Empty](#googleprotobufempty)
+
+
+
+This message has no parameters.
+
+
+## GetBlockOrders
+
+
+### Request Type: [GetBlockOrdersRequest](#getblockordersrequest)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| market | [string](#string) |  |
+
+
+### Response Type: [GetBlockOrdersResponse](#getblockordersresponse)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_orders | [BlockOrder](#blockorder) |  |
+
+
+
+# WalletService
+
+
+## NewDepositAddress
+
+
+### Request Type: [NewDepositAddressRequest](#newdepositaddressrequest)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| symbol | [Symbol](#symbol) |  |
+
+
+### Response Type: [NewDepositAddressResponse](#newdepositaddressresponse)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| address | [string](#string) |  |
+
+
+## GetBalances
+
+
+### Request Type: [google.protobuf.Empty](#googleprotobufempty)
+
+
+
+This message has no parameters.
+
+
+### Response Type: [GetBalancesResponse](#getbalancesresponse)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| balances | [Balance](#balance) |  |
+
+
+## CommitBalance
+
+
+### Request Type: [CommitBalanceRequest](#commitbalancerequest)
+
+
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| symbol | [Symbol](#symbol) |  |
+| balance | [int64](#int64) |  |
+
+
+### Response Type: [google.protobuf.Empty](#googleprotobufempty)
+
+
+
+This message has no parameters.
+
+
+
+# Message Reference
+
+
+## Balance
+
+
+Used in: [GetBalancesResponse](#getbalancesresponse)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| symbol | [string](#string) |  |
+| totalBalance | [int64](#int64) |  |
+| totalChannelBalance | [int64](#int64) |  |
+
+
+
+## BlockOrder
+
+
+Used in: [GetBlockOrdersResponse](#getblockordersresponse)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+| market | [string](#string) |  |
+| side | [Side](#side) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| is_market_order | [bool](#bool) |  |
+| limit_price | [string](#string) | Prices are decimals but are represented as strings since Protobuf does not support a decimal type |
+| time_in_force | [TimeInForce](#timeinforce) |  |
+| status | [BlockOrderStatus](#blockorderblockorderstatus) |  |
+
+
+### <a name="blockorderblockorderstatus">BlockOrder.BlockOrderStatus</a>
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| ACTIVE | 0 |  |
+| CANCELLED | 1 |  |
+| COMPLETED | 2 |  |
+| FAILED | 3 |  |
+
+
+
+## CancelBlockOrderRequest
+
+
+Used in: [CancelBlockOrder](#cancelblockorder)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+
+
+
+## CommitBalanceRequest
+
+
+Used in: [CommitBalance](#commitbalance)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| symbol | [Symbol](#symbol) |  |
+| balance | [int64](#int64) |  |
+
+
+
+## CreateBlockOrderRequest
+
+
+Used in: [CreateBlockOrder](#createblockorder)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| market | [string](#string) |  |
+| side | [Side](#side) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| is_market_order | [bool](#bool) |  |
+| limit_price | [string](#string) | Prices are decimals but are represented as strings since Protobuf does not support a decimal type |
+| time_in_force | [TimeInForce](#timeinforce) |  |
+
+
+
+## CreateBlockOrderResponse
+
+
+Used in: [CreateBlockOrder](#createblockorder)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+
+
+
+## EngineStatus
+
+
+Used in: [HealthCheckResponse](#healthcheckresponse)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| symbol | [string](#string) |  |
+| status | [string](#string) |  |
+
+
+
+## Fill
+
+
+Used in: [GetBlockOrderResponse](#getblockorderresponse)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| order_id | [string](#string) |  |
+| fill_id | [string](#string) |  |
+| fill_status | [FillStatus](#fillfillstatus) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| price | [string](#string) |  |
+
+
+### <a name="fillfillstatus">Fill.FillStatus</a>
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CREATED | 0 |  |
+| FILLED | 1 |  |
+| EXECUTED | 2 |  |
+| COMPLETED | 3 |  |
+| REJECTED | 4 |  |
+
+
+
+## GetBalancesResponse
+
+
+Used in: [GetBalances](#getbalances)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| balances | [Balance](#balance) |  |
+
+
+
+## GetBlockOrderRequest
+
+
+Used in: [GetBlockOrder](#getblockorder)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_order_id | [string](#string) |  |
+
+
+
+## GetBlockOrderResponse
+
+
+Used in: [GetBlockOrder](#getblockorder)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| status | [BlockOrderStatus](#blockorderblockorderstatus) |  |
+| market | [string](#string) |  |
+| side | [Side](#side) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| is_market_order | [bool](#bool) |  |
+| limit_price | [string](#string) | Prices are decimals but are represented as strings since Protobuf does not support a decimal type |
+| time_in_force | [TimeInForce](#timeinforce) |  |
+| fill_amount | [string](#string) |  |
+| open_orders | [Order](#order) |  |
+| fills | [Fill](#fill) |  |
+
+
+
+## GetBlockOrdersRequest
+
+
+Used in: [GetBlockOrders](#getblockorders)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| market | [string](#string) |  |
+
+
+
+## GetBlockOrdersResponse
+
+
+Used in: [GetBlockOrders](#getblockorders)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| block_orders | [BlockOrder](#blockorder) |  |
+
+
+
+## HealthCheckResponse
+
+
+Used in: [HealthCheck](#healthcheck)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| engine_status | [EngineStatus](#enginestatus) |  |
+| relayer_status | [string](#string) |  |
+
+
+
+## MarketEvent
+
+
+Used in: [WatchMarketResponse](#watchmarketresponse)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| orderId | [string](#string) |  |
+| amount | [string](#string) |  |
+| price | [string](#string) |  |
+| side | [Side](#side) |  |
+
+
+
+## NewDepositAddressRequest
+
+
+Used in: [NewDepositAddress](#newdepositaddress)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| symbol | [Symbol](#symbol) |  |
+
+
+
+## NewDepositAddressResponse
+
+
+Used in: [NewDepositAddress](#newdepositaddress)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| address | [string](#string) |  |
+
+
+
+## Order
+
+
+Used in: [GetBlockOrderResponse](#getblockorderresponse)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| order_id | [string](#string) |  |
+| order_status | [OrderStatus](#orderorderstatus) |  |
+| amount | [string](#string) | Amounts are expressed in common units for a currency (e.g. BTC) and therefore support decimals
+Protobuf does not support a decimal type, so we represent it as a string |
+| price | [string](#string) | Prices are decimals but are represented as strings since Protobuf does not support a decimal type |
+
+
+### <a name="orderorderstatus">Order.OrderStatus</a>
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| CREATED | 0 |  |
+| PLACED | 1 |  |
+| FILLED | 2 |  |
+| EXECUTED | 3 |  |
+| COMPLETED | 4 |  |
+| REJECTED | 5 |  |
+
+
+
+## WatchMarketRequest
+
+
+Used in: [WatchMarket](#watchmarket)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| market | [string](#string) |  |
+
+
+
+## WatchMarketResponse
+
+
+Used in: [WatchMarket](#watchmarket)
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| type | [EventType](#watchmarketresponseeventtype) |  |
+| market_event | [MarketEvent](#marketevent) |  |
+
+
+### <a name="watchmarketresponseeventtype">WatchMarketResponse.EventType</a>
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| ADD | 0 |  |
+| DELETE | 1 |  |
+
+
+
+## google.protobuf.Empty
+
+
+Used in: [HealthCheck](#healthcheck), [CancelBlockOrder](#cancelblockorder), [GetBalances](#getbalances), [CommitBalance](#commitbalance)
+
+This message has no parameters.
+
+
+
+
+## Side
+
+
+Used in: [BlockOrder](#blockorder), [CreateBlockOrderRequest](#createblockorderrequest), [GetBlockOrderResponse](#getblockorderresponse), [MarketEvent](#marketevent)
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| BID | 0 |  |
+| ASK | 1 |  |
+
+
+## Symbol
+
+
+Used in: [CommitBalanceRequest](#commitbalancerequest), [NewDepositAddressRequest](#newdepositaddressrequest)
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| BTC | 0 |  |
+| LTC | 1 |  |
+
+
+## TimeInForce
+
+
+Used in: [BlockOrder](#blockorder), [CreateBlockOrderRequest](#createblockorderrequest), [GetBlockOrderResponse](#getblockorderresponse)
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| GTC | 0 |  |
+| FOK | 1 |  |
+| IOC | 2 |  |
+
+
+
+# Scalar Value Types
+
+For more information, see the [proto3 reference](https://developers.google.com/protocol-buffers/docs/proto3#scalar).
+
+| Type | Notes |
+| ---- | ----- |
+| <a name="double">double</a> |  |
+| <a name="float">float</a> |  |
+| <a name="int32">int32</a> | Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead. |
+| <a name="int64">int64</a> | Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead. |
+| <a name="uint32">uint32</a> | Uses variable-length encoding. |
+| <a name="uint64">uint64</a> | Uses variable-length encoding. |
+| <a name="sint32">sint32</a> | Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s. |
+| <a name="sint64">sint64</a> | Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s. |
+| <a name="fixed32">fixed32</a> | Always four bytes. More efficient than uint32 if values are often greater than 2^28. |
+| <a name="fixed64">fixed64</a> | Always eight bytes. More efficient than uint64 if values are often greater than 2^56. |
+| <a name="sfixed32">sfixed32</a> | Always four bytes. |
+| <a name="sfixed64">sfixed64</a> | Always eight bytes. |
+| <a name="bool">bool</a> |  |
+| <a name="string">string</a> | A string must always contain UTF-8 encoded or 7-bit ASCII text. |
+| <a name="bytes">bytes</a> | May contain any arbitrary sequence of bytes. |
