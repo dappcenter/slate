@@ -26,9 +26,12 @@ search: true
 
 {{#methods}}
 ## {{name}}
+
+### {{#unary}}Unary{{/unary}}{{#duplexStreaming}}Duplex Streaming{{/duplexStreaming}}{{#requestStreamingOnly}}Request Streaming{{/requestStreamingOnly}}{{#responseStreamingOnly}}Response Streaming{{/responseStreamingOnly}} RPC
+
 {{{description}}}
 
-### Request Type: [{{requestFullType}}](#{{requestTypeId}})
+### Request Type: [{{requestFullType}}](#{{requestTypeId}}) {{#requestStreaming}}(Streaming){{/requestStreaming}}
 
 {{#requestTypeEmbedded}}
 {{{description}}}
@@ -58,7 +61,7 @@ This message has no parameters.
 {{/enums}}
 {{/requestTypeEmbedded}}
 
-### Response Type: [{{responseFullType}}](#{{responseTypeId}})
+### Response Type: [{{responseFullType}}](#{{responseTypeId}}) {{#responseStreaming}}(Streaming){{/responseStreaming}}
 
 {{#responseTypeEmbedded}}
 {{{description}}}

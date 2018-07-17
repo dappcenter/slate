@@ -2,8 +2,12 @@ const { readFileSync, writeFileSync } = require('fs')
 const path = require('path')
 const parameterize = require('parameterize')
 const mustache = require('mustache')
+const protobuf = require('protobufjs')
 const template = readFileSync(path.resolve(__dirname, 'source', 'slate.mustache'), 'utf8')
 const protocJson = require('./tmp/broker-proto.json')
+
+const brokerProto = protobuf.loadSync(path.resolve(__dirname, 'tmp', 'broker.proto'))
+// TODO: replace protocJson with brokerProto entirely
 
 protocJson.files.forEach(inputFile => {
   inputFile.enums.forEach(enumb => {
@@ -64,6 +68,14 @@ protocJson.files.forEach(inputFile => {
       // so we fix them here.
       method.requestTypeId = parameterize(method.requestFullType)
       method.responseTypeId = parameterize(method.responseFullType)
+
+      // Add streaming information, which is left out by protoc-gen-doc
+      method.requestStreaming = !!brokerProto.nested[service.longName].methods[method.name].requestStream
+      method.responseStreaming = !!brokerProto.nested[service.longName].methods[method.name].responseStream
+      method.duplexStreaming = method.requestStreaming && method.responseStreaming
+      method.unary = !method.requestStreaming && !method.responseStreaming
+      method.requestStreamingOnly = method.requestStreaming && !method.duplexStreaming
+      method.responseStreamingOnly = method.responseStreaming && !method.duplexStreaming
 
       // pull the request and response types in directly for a better user experience
       method.requestTypeEmbedded = inputFile.messages.find(message => message.longName === method.requestFullType)

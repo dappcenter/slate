@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "mustache": "^2.3.0",
-    "parameterize": "^0.1.0"
+    "parameterize": "^0.1.0",
+    "protobufjs": "^6.8.6"
   }
 }
