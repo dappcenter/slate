@@ -18,4 +18,4 @@ cp -r build now/docs/broker/api
 cp now.json now/now.json
 
 now now || exit 1
-now alias $(pbpaste) docs-broker-api.kinesis.network
+now alias $(pbpaste) docs-broker-api.sparkswap.com
