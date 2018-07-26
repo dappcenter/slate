@@ -41,6 +41,10 @@ under the License.
     <% else %>
       <%= javascript_include_tag  "all_nosearch" %>
     <% end %>
+
+    <link rel="icon" type="image/png" href="/img/favicon-16px.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/img/favicon-32px.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/img/favicon-180px.png" sizes="180x180">
   </head>
 
   <body class="<%= page_classes %>" data-languages="<%=h language_tabs.map{ |lang| lang.is_a?(Hash) ? lang.keys.first : lang }.to_json %>">
@@ -52,7 +56,7 @@ under the License.
     </a>
     <div class="toc-wrapper">
       <a href="http://sparkswap.com">
-        <%= image_tag "logo.png", class: 'logo' %>
+        <%= image_tag "https://sparkswap.com/img/logo-inverted.svg", class: 'logo' %>
       </a>
       <% if current_page.data.toc_headers %>
         <ul class="toc-header">
