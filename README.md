@@ -32,3 +32,6 @@ This project requires Go, Ruby, and Node.js (don't @ me).
 
 `./dev.sh`
 
+### Deploying
+
+`./deploy.sh`
