@@ -6,9 +6,9 @@ echo "Cleaning working directory"
 rm -rf tmp
 mkdir tmp
 
-# curl -o source/broker.proto -s https://raw.githubusercontent.com/kinesis-exchange/broker/master/broker-daemon/proto/broker.proto
-# Temporary until my latest changes go up
-cp ../broker/broker-daemon/proto/broker.proto tmp/broker.proto
+curl -o tmp/broker.proto -s https://raw.githubusercontent.com/kinesis-exchange/broker/master/broker-daemon/proto/broker.proto
+# Below can be used for dev
+# cp ../broker/broker-daemon/proto/broker.proto tmp/broker.proto
 
 echo "Generating JSON description of proto..."
 # Note: this does not support oneof, but there is a PR open for that support
