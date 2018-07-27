@@ -78,6 +78,21 @@ html, body {
     margin: $logo-margin;
   }
 
+  // This is the logo at the bottom of the ToC
+  .secondary-logo {
+    display: block;
+    max-width: $secondary-logo-size;
+    position: absolute;
+    bottom: 2%;
+    left: 50%;
+    margin-left: $nav-width / -3;
+    opacity: 0.7;
+  }
+
+  a:hover .secondary-logo {
+    opacity: 0.8;
+  }
+
   &>.search {
     position: relative;
 

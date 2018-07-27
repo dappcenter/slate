@@ -63,16 +63,9 @@ under the License.
       </span>
     </a>
     <div class="toc-wrapper">
-      <a href="http://sparkswap.com">
-        <%= image_tag "https://sparkswap.com/img/logo-inverted.svg", class: 'logo' %>
+      <a href="/docs">
+        <%= image_tag "https://sparkswap.com/docs/img/docs-logo.png", class: 'logo' %>
       </a>
-      <% if current_page.data.toc_headers %>
-        <ul class="toc-header">
-          <% current_page.data.toc_headers.each do |header| %>
-            <li><%= header %></li>
-          <% end %>
-        </ul>
-      <% end %>
       <% if language_tabs.any? %>
         <div class="lang-selector">
           <% language_tabs.each do |lang| %>
@@ -113,6 +106,9 @@ under the License.
           <% end %>
         </ul>
       <% end %>
+      <a href="/">
+        <%= image_tag "https://sparkswap.com/docs/img/logo-inverted-transparent.svg", class: 'secondary-logo' %>
+      </a>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
