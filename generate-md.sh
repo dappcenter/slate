@@ -6,7 +6,7 @@ echo "Cleaning working directory"
 rm -rf tmp
 mkdir tmp
 
-curl -o tmp/broker.proto -s https://raw.githubusercontent.com/kinesis-exchange/broker/master/broker-daemon/proto/broker.proto
+curl -o tmp/broker.proto -s https://raw.githubusercontent.com/sparkswap/broker/master/broker-daemon/proto/broker.proto
 # Below can be used for dev
 # cp ../broker/broker-daemon/proto/broker.proto tmp/broker.proto
 
