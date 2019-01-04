@@ -7,8 +7,9 @@ rm -rf tmp
 mkdir tmp
 
 curl -o tmp/broker.proto -s https://raw.githubusercontent.com/sparkswap/broker/master/broker-daemon/proto/broker.proto
-# Below can be used for dev
-# cp ../broker/broker-daemon/proto/broker.proto tmp/broker.proto
+mkdir -p tmp/google/api
+curl -o tmp/google/api/annotations.proto -s https://raw.githubusercontent.com/sparkswap/broker/master/broker-daemon/proto/google/api/annotations.proto
+curl -o tmp/google/api/http.proto -s https://raw.githubusercontent.com/sparkswap/broker/master/broker-daemon/proto/google/api/http.proto
 
 echo "Generating JSON description of proto..."
 # Note: this does not support oneof, but there is a PR open for that support
