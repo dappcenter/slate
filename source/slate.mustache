@@ -32,7 +32,7 @@ search: true
 {{#requestStreamingOnly}}Request Streaming RPCs allow the client to stream data to the server, but the server responds with a single message.{{/requestStreamingOnly}}
 {{#responseStreamingOnly}}Response Streaming RPCs take a single request message from the client, but the server responds with a stream of messages.{{/responseStreamingOnly}}
 
-### Request Type: [{{requestFullType}}](#{{requestTypeId}}) {{#requestStreaming}}(Streaming){{/requestStreaming}}
+### Request Type: [{{requestLongType}}](#{{requestTypeId}}) {{#requestStreaming}}(Streaming){{/requestStreaming}}
 
 {{#requestTypeEmbedded}}
 {{{description}}}
@@ -96,7 +96,7 @@ Used in: {{#usedBy}}{{^first}}, {{/first}}[{{name}}](#{{id}}){{/usedBy}}
 {{/messages}}
 {{/requestTypeEmbedded}}
 
-### Response Type: [{{responseFullType}}](#{{responseTypeId}}) {{#responseStreaming}}(Streaming){{/responseStreaming}}
+### Response Type: [{{responseLongType}}](#{{responseTypeId}}) {{#responseStreaming}}(Streaming){{/responseStreaming}}
 
 {{#responseTypeEmbedded}}
 {{{description}}}

@@ -1,6 +1,10 @@
 const { readFileSync, writeFileSync } = require('fs')
 const path = require('path')
-const parameterize = require('parameterize')
+const p = require('parameterize')
+// parameterize doesn't replace periods (.) with hyphens, so we do it manually
+const parameterize = function (str) {
+  return p(str.replace(/\./g, '-'))
+}
 const mustache = require('mustache')
 const protobuf = require('protobufjs')
 const template = readFileSync(path.resolve(__dirname, 'source', 'slate.mustache'), 'utf8')
@@ -14,7 +18,7 @@ protocJson.files.forEach(inputFile => {
     enumb.id = parameterize(enumb.longName)
   })
 
-  // add the google protobuf message
+  // add the google messages back
   inputFile.messages.push({
     name: 'Empty',
     longName: 'google.protobuf.Empty',
@@ -28,6 +32,7 @@ protocJson.files.forEach(inputFile => {
 
   inputFile.messages.forEach(message => {
     message.id = parameterize(message.longName)
+    console.log(message.longName, message.id)
 
     message.enums = []
     message.messages = []
@@ -67,28 +72,33 @@ protocJson.files.forEach(inputFile => {
     })
   })
 
+
+  // remove the extra google messages
+  inputFile.messages.splice(inputFile.messages.findIndex(msg => msg.longName === 'google'), 1)
+  inputFile.messages.splice(inputFile.messages.findIndex(msg => msg.longName === 'google.protobuf'), 1)
+
   inputFile.services.forEach(service => {
     service.id = parameterize(service.longName)
 
     service.methods.forEach(method => {
       method.id = parameterize(method.name)
 
-      // note: the source library (protoc-gen-doc) mixes up `Full` and `Long` in the request and response types,
-      // so we fix them here.
-      method.requestTypeId = parameterize(method.requestFullType)
-      method.responseTypeId = parameterize(method.responseFullType)
+      method.requestTypeId = parameterize(method.requestLongType)
+      method.responseTypeId = parameterize(method.responseLongType)
+
+      console.log(method.requestLongType, method.requestTypeId)
 
       // Add streaming information, which is left out by protoc-gen-doc
-      method.requestStreaming = !!brokerProto.nested[service.longName].methods[method.name].requestStream
-      method.responseStreaming = !!brokerProto.nested[service.longName].methods[method.name].responseStream
+      method.requestStreaming = !!brokerProto.nested.broker.nested.rpc[service.longName].methods[method.name].requestStream
+      method.responseStreaming = !!brokerProto.nested.broker.nested.rpc[service.longName].methods[method.name].responseStream
       method.duplexStreaming = method.requestStreaming && method.responseStreaming
       method.unary = !method.requestStreaming && !method.responseStreaming
       method.requestStreamingOnly = method.requestStreaming && !method.duplexStreaming
       method.responseStreamingOnly = method.responseStreaming && !method.duplexStreaming
 
       // pull the request and response types in directly for a better user experience
-      method.requestTypeEmbedded = inputFile.messages.find(message => message.longName === method.requestFullType)
-      if (!method.requestTypeEmbedded) throw new Error(`${method.requestFullType} does not exist`)
+      method.requestTypeEmbedded = inputFile.messages.find(message => message.longName === method.requestLongType)
+      if (!method.requestTypeEmbedded) throw new Error(`${method.requestLongType} does not exist`)
       // add an indicator to the message of where it is being used
       method.requestTypeEmbedded.usedBy = method.requestTypeEmbedded.usedBy || []
       method.requestTypeEmbedded.usedBy.push({
@@ -97,8 +107,8 @@ protocJson.files.forEach(inputFile => {
       })
       method.requestTypeEmbedded.usedBy[0].first = true
 
-      method.responseTypeEmbedded = inputFile.messages.find(message => message.longName === method.responseFullType)
-      if (!method.responseTypeEmbedded) throw new Error(`${method.responseFullType} does not exist`)
+      method.responseTypeEmbedded = inputFile.messages.find(message => message.longName === method.responseLongType)
+      if (!method.responseTypeEmbedded) throw new Error(`${method.responseLongType} does not exist`)
 
       // add an indicator of where the message is being used
       method.responseTypeEmbedded.usedBy = method.responseTypeEmbedded.usedBy || []
