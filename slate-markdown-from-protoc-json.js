@@ -32,7 +32,6 @@ protocJson.files.forEach(inputFile => {
 
   inputFile.messages.forEach(message => {
     message.id = parameterize(message.longName)
-    console.log(message.longName, message.id)
 
     message.enums = []
     message.messages = []
@@ -85,8 +84,6 @@ protocJson.files.forEach(inputFile => {
 
       method.requestTypeId = parameterize(method.requestLongType)
       method.responseTypeId = parameterize(method.responseLongType)
-
-      console.log(method.requestLongType, method.requestTypeId)
 
       // Add streaming information, which is left out by protoc-gen-doc
       method.requestStreaming = !!brokerProto.nested.broker.nested.rpc[service.longName].methods[method.name].requestStream
